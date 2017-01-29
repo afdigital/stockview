@@ -1,0 +1,25 @@
+.col-md-12
+  %h1 My Friends
+
+= render 'friends/lookup'
+
+- if @friendships.any?
+  .col-md-12
+    %table.table.table-striped
+      %thead
+        %tr 
+          %th Name
+          %th Email
+          %th
+        %tbody
+          - @friendships.each do |friend|
+            %tr
+              %td= friend.name
+              %td= friend.email
+              %td
+                %ul.list-unstyled.list-inline
+                  %li= link_to "View Profile", user_path(friend), class: "btn btn-xs btn-info"
+                  %li= link_to raw("<i class='fa fa-times'></i> Remove from friends").html_safe, friendship_path(friend), method: :delete, data: { confirm: "Are you sure you wish to remove #{friend} from your friends"}, class: "btn btn-xs btn-danger"
+
+- else
+  %p.lead.col-md-12 You haven't added any friends yet.

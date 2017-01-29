@@ -1,0 +1,15 @@
+.col-md-12
+  %h1= @user.name
+  %small.text-muted= @user.email
+  .spacer
+
+- if @user.stocks.any?
+  .col-md-12
+    %h3 Stocks Tracked
+  = render "stocks/list"
+- else
+  .col-md-12
+    %p.lead= "#{@user} is not tracking any stocks."
+
+.col-md-12
+  = link_to "Back to Friends List", my_friends_path, class: "btn btn-info"

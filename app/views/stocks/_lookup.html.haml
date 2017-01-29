@@ -1,0 +1,37 @@
+#stock-lookup
+  .col-md-12
+    %h3 Search for stocks
+  = form_tag search_stocks_path, remote: true, method: :get, id: 'stock_lookup_form' do
+    .form-group.row.no-padding.text-center.col-md-12
+      .col-md-10
+        = text_field_tag :stock, params[:stock],                        placeholder: "Stock ticker symbol",                         autofocus: true,                                                class: "form-control search-box input-lg"
+      .col-md-2
+        = button_tag(type: :submit, class: "btn btn-success btn-lg", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Looking..." }) do
+          %i.fa.fa-search &nbsp; Look up a stock
+
+  - if @stock
+    .col-md-12
+      .panel.panel-default.results-block.col-md-12#stock-lookup-results
+        .panel-body
+          .pull-left
+            %strong Symbol:
+            = @stock.ticker
+            %strong Name:
+            = @stock.name
+            %strong Price:
+            = @stock.price
+          .pull-right
+            - if current_user.can_add_stock?(@stock.ticker)
+              = link_to raw("<i class='fa fa-plus'></i> &nbsp; Add to My Stocks").html_safe, user_stocks_path(user: current_user, stock_ticker: @stock.ticker, stock_id: @stock.id ? @stock.id : ''), class: "btn btn-xs btn-success", method: :post
+            - else
+              %span.label.label-default                
+                - if !current_user.under_stock_limit?
+                  10 stock limit reached
+                - else current_user.stock_already_added?(@stock.ticker)
+                  Stock already added
+          .clearfix
+
+  .col-md-12
+    #stock-lookup-errors
+
+

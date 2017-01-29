@@ -1,0 +1,32 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title StockView
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    / = javascript_include_tag :modernizr
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  %body{class: "#{controller_name}"}
+    
+    %header
+      = render 'layouts/header'
+      
+    .main-body.container
+
+      - flash.each do |type, message|
+        .alert.alert-info.fade-in
+          %button.close{data: {dismiss: "alert"}, aria: {label: "Close"}}
+            %span{aria: {hidden: "true" }}
+              &times;
+          = message
+
+      = yield
+
+  %footer
+    .container
+      .col-md-12
+        %p &copy; 2015 StockView. All rights reserved.
+
+
+

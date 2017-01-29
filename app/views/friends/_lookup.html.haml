@@ -1,0 +1,43 @@
+#friend-lookup 
+  .col-md-12
+    %h3 Search for friends
+  = form_tag search_friends_path, remote: true, method: :get, id: 'friend_lookup_form' do
+    .form-group.row.no-padding.text-center.col-md-12
+      .col-md-10
+        = text_field_tag :search_param, params[:search_param],     placeholder: "First name, Last name or Email", autofocus: true, class: "form-control search-box input-lg"
+      .col-md-2
+        = button_tag(type: :submit, class: "btn btn-success btn-lg", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Looking..." }) do
+          %i.fa.fa-search &nbsp; Look up a friend
+
+  - if @users
+    - if @users.size > 0
+      .col-md-12
+        .panel.panel-default.results-block.col-md-10#friend-lookup-results
+          .panel-body
+            %table.search-results-table.col-md-12
+              %tbody
+                - @users.each do |user|
+                  %tr
+                    %td
+                      %strong Name:
+                      = user.name
+                    %td
+                      %strong Email:
+                      = user.email
+                    %td
+                      %ul.list-unstyled.list-inline
+                        %li= link_to "View Profile", user_path(user), class: "btn btn-xs btn-info"
+                        - if current_user.not_friends_with?(user.id)
+                          %li= link_to raw("<i class='fa fa-plus'></i> Add friend").html_safe, add_friend_path(user: current_user, friend: user), class: "btn btn-xs btn-success", method: :post
+                        - else
+                          %span.label.label-default
+                            %i.fa.fa-tick
+                            Friends
+    - else
+      %p.lead.col-md-12 No users found with this name.
+
+
+  .col-md-12
+    #friend-lookup-errors
+
+
